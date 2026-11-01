@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telemedicine Platform - ER Diagram</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+        }
+
+        .er-diagram {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .table {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            min-width: 250px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .table:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .table-title {
+            background: #667eea;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .table-content {
+            font-size: 0.9em;
+        }
+
+        .field {
+            padding: 5px 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .field:last-child {
+            border-bottom: none;
+        }
+
+        .pk {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .fk {
+            color: #3498db;
+            font-style: italic;
+        }
+
+        .relationship {
+            color: #27ae60;
+            font-size: 0.85em;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px dashed #27ae60;
+        }
+
+        .info-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .info-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .info-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-card li {
+            padding: 5px 0;
+            color: #666;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .pk-legend { background: #e74c3c; }
+        .fk-legend { background: #3498db; }
+        .normal-legend { background: #333; }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏥 Telemedicine Platform</h1>
+        <p class="subtitle">Entity Relationship Diagram (ERD)</p>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color pk-legend"></div>
+                <span>Primary Key (PK)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color fk-legend"></div>
+                <span>Foreign Key (FK)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color normal-legend"></div>
+                <span>Regular Field</span>
+            </div>
+        </div>
+
+        <div class="er-diagram">
+            <!-- Patients Table -->
+            <div class="table">
+                <div class="table-title">patients</div>
+                <div class="table-content">
+                    <div class="field"><span class="pk">PK</span> id (INT)</div>
+                    <div class="field">name (VARCHAR)</div>
+                    <div class="field">email (VARCHAR)</div>
+                    <div class="field">phone (VARCHAR)</div>
+                    <div class="field">age (INT)</div>
+                    <div class="field">gender (VARCHAR)</div>
+                    <div class="field">address (TEXT)</div>
+                    <div class="field">password (VARCHAR)</div>
+                    <div class="field">created_at (TIMESTAMP)</div>
+                    <div class="relationship">Has many consultations</div>
+                    <div class="relationship">Has many follow-ups</div>
+                </div>
+            </div>
+
+            <!-- Doctors Table -->
+            <div class="table">
+                <div class="table-title">doctors</div>
+                <div class="table-content">
+                    <div class="field"><span class="pk">PK</span> id (INT)</div>
+                    <div class="field">name (VARCHAR)</div>
+                    <div class="field">email (VARCHAR)</div>
+                    <div class="field">phone (VARCHAR)</div>
+                    <div class="field">specialization (VARCHAR)</div>
+                    <div class="field">experience_years (INT)</div>
+                    <div class="field">available (BOOLEAN)</div>
+                    <div class="field">password (VARCHAR)</div>
+                    <div class="field">created_at (TIMESTAMP)</div>
+                    <div class="relationship">Has many consultations</div>
+                    <div class="relationship">Has many follow-ups</div>
+                </div>
+            </div>
+
+            <!-- Consultations Table -->
+            <div class="table">
+                <div class="table-title">consultations</div>
+                <div class="table-content">
+                    <div class="field"><span class="pk">PK</span> id (INT)</div>
+                    <div class="field"><span class="fk">FK</span> patient_id (INT)</div>
+                    <div class="field"><span class="fk">FK</span> doctor_id (INT)</div>
+                    <div class="field">symptoms (TEXT)</div>
+                    <div class="field">diagnosis (TEXT)</div>
+                    <div class="field">status (ENUM)</div>
+                    <div class="field">created_at (TIMESTAMP)</div>
+                    <div class="field">updated_at (TIMESTAMP)</div>
+                    <div class="relationship">Has one prescription</div>
+                    <div class="relationship">Has many follow-ups</div>
+                </div>
+            </div>
+
+            <!-- Prescriptions Table -->
+            <div class="table">
+                <div class="table-title">prescriptions</div>
+                <div class="table-content">
+                    <div class="field"><span class="pk">PK</span> id (INT)</div>
+                    <div class="field"><span class="fk">FK</span> consultation_id (INT)</div>
+                    <div class="field">medicines (TEXT)</div>
+                    <div class="field">instructions (TEXT)</div>
+                    <div class="field">created_at (TIMESTAMP)</div>
+                    <div class="relationship">Belongs to consultation</div>
+                </div>
+            </div>
+
+            <!-- Pharmacies Table -->
+            <div class="table">
+                <div class="table-title">pharmacies</div>
+                <div class="table-content">
+                    <div class="field"><span class="pk">PK</span> id (INT)</div>
+                    <div class="field">name (VARCHAR)</div>
+                    <div class="field">address (TEXT)</div>
+                    <div class="field">phone (VARCHAR)</div>
+                    <div class="field">email (VARCHAR)</div>
+                    <div class="field">operating_hours (VARCHAR)</div>
+                    <div class="field">created_at (TIMESTAMP)</div>
+                    <div class="relationship">Has many medicines</div>
+                </div>
+            </div>
+
+            <!-- Medicines Table -->
+            <div class="table">
+                <div class="table-title">medicines</div>
+                <div class="table-content">
+                    <div class="field"><span class="pk">PK</span> id (INT)</div>
+                    <div class="field"><span class="fk">FK</span> pharmacy_id (INT)</div>
+                    <div class="field">name (VARCHAR)</div>
+                    <div class="field">description (TEXT)</div>
+                    <div class="field">price (DECIMAL)</div>
+                    <div class="field">stock_quantity (INT)</div>
+                    <div class="field">available (BOOLEAN)</div>
+                    <div class="field">created_at (TIMESTAMP)</div>
+                    <div class="relationship">Belongs to pharmacy</div>
+                </div>
+            </div>
+
+            <!-- Follow-ups Table -->
+            <div class="table">
+                <div class="table-title">followups</div>
+                <div class="table-content">
+                    <div class="field"><span class="pk">PK</span> id (INT)</div>
+                    <div class="field"><span class="fk">FK</span> consultation_id (INT)</div>
+                    <div class="field"><span class="fk">FK</span> patient_id (INT)</div>
+                    <div class="field"><span class="fk">FK</span> doctor_id (INT)</div>
+                    <div class="field">scheduled_date (DATE)</div>
+                    <div class="field">notes (TEXT)</div>
+                    <div class="field">status (ENUM)</div>
+                    <div class="field">created_at (TIMESTAMP)</div>
+                    <div class="relationship">Belongs to consultation</div>
+                    <div class="relationship">Belongs to patient</div>
+                    <div class="relationship">Belongs to doctor</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>📊 Database Overview</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>👨‍⚕️ Patients</h3>
+                    <ul>
+                        <li>5 sample patients</li>
+                        <li>User authentication</li>
+                        <li>Personal health records</li>
+                        <li>Consultation history</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h3>👩‍⚕️ Doctors</h3>
+                    <ul>
+                        <li>100+ real doctors</li>
+                        <li>50+ specializations</li>
+                        <li>Availability tracking</li>
+                        <li>Experience data</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h3>💊 Medicines</h3>
+                    <ul>
+                        <li>30+ real medicines</li>
+                        <li>5 pharmacies</li>
+                        <li>Stock tracking</li>
+                        <li>Price information</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h3>📅 Consultations</h3>
+                    <ul>
+                        <li>Patient-doctor connection</li>
+                        <li>Symptom tracking</li>
+                        <li>Diagnosis records</li>
+                        <li>Status management</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h3>💉 Prescriptions</h3>
+                    <ul>
+                        <li>Digital prescriptions</li>
+                        <li>Medicine instructions</li>
+                        <li>Linked to consultations</li>
+                        <li>Timestamp tracking</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h3>🔄 Follow-ups</h3>
+                    <ul>
+                        <li>Scheduled appointments</li>
+                        <li>Status tracking</li>
+                        <li>Notes system</li>
+                        <li>Reminder capability</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>🔗 Relationships Summary</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>One-to-Many</h3>
+                    <ul>
+                        <li>Patient → Consultations</li>
+                        <li>Doctor → Consultations</li>
+                        <li>Pharmacy → Medicines</li>
+                        <li>Consultation → Follow-ups</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h3>One-to-One</h3>
+                    <ul>
+                        <li>Consultation → Prescription</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h3>Many-to-One</h3>
+                    <ul>
+                        <li>Medicines → Pharmacy</li>
+                        <li>Follow-ups → Consultation</li>
+                        <li>Follow-ups → Patient</li>
+                        <li>Follow-ups → Doctor</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>🛠️ Technology Stack</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>Database</h3>
+                    <ul>
+                        <li>MySQL 8.0+</li>
+                        <li>SQL Workbench compatible</li>
+                        <li>ACID compliant</li>
+                        <li>Foreign key constraints</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h3>Backend</h3>
+                    <ul>
+                        <li>Python Flask</li>
+                        <li>RESTful API</li>
+                        <li>CORS enabled</li>
+                        <li>MySQL connector</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h3>Frontend</h3>
+                    <ul>
+                        <li>HTML5/CSS3</li>
+                        <li>JavaScript (ES6+)</li>
+                        <li>Fetch API</li>
+                        <li>Responsive design</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

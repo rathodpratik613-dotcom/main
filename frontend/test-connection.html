@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-result {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Frontend-Backend Connection Test</h1>
+    <p>Testing connection to: <strong id="apiUrl"></strong></p>
+
+    <button onclick="testHealth()">Test Health Endpoint</button>
+    <button onclick="testDoctors()">Test Doctors Endpoint</button>
+    <button onclick="testLogin()">Test Login</button>
+
+    <div id="results"></div>
+
+    <script>
+        const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+            ? 'http://localhost:5000/api'
+            : 'https://telemedicine-backend.onrender.com/api';
+        document.getElementById('apiUrl').textContent = API_URL;
+
+        function addResult(message, type) {
+            const resultsDiv = document.getElementById('results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${type}`;
+            resultDiv.innerHTML = message;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        async function testHealth() {
+            addResult('Testing health endpoint...', 'info');
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                const data = await response.json();
+                if (response.ok) {
+                    addResult(`✅ Health check successful: ${data.message}`, 'success');
+                } else {
+                    addResult(`❌ Health check failed: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Connection error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testDoctors() {
+            addResult('Testing doctors endpoint...', 'info');
+            try {
+                const response = await fetch(`${API_URL}/doctors`);
+                const data = await response.json();
+                if (response.ok && Array.isArray(data)) {
+                    addResult(`✅ Doctors endpoint successful: Found ${data.length} doctors`, 'success');
+                } else {
+                    addResult(`❌ Doctors endpoint failed`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Connection error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testLogin() {
+            addResult('Testing login endpoint...', 'info');
+            try {
+                const response = await fetch(`${API_URL}/patients/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'john.smith@email.com',
+                        password: 'patient123'
+                    })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    addResult(`✅ Login successful: ${data.message}`, 'success');
+                } else {
+                    addResult(`❌ Login failed: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Connection error: ${error.message}`, 'error');
+            }
+        }
+
+        // Auto-test on load
+        window.onload = function() {
+            document.getElementById('apiUrl').textContent = API_URL;
+            addResult('Test page loaded. Click buttons to test endpoints.', 'info');
+        };
+    </script>
+</body>
+</html>

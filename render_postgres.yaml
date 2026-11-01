@@ -1,0 +1,52 @@
+services:
+  # PostgreSQL Database (Render Free Tier Compatible)
+  - type: pserv
+    name: telemedicine-postgres
+    runtime: postgres
+    plan: free
+    region: oregon
+    maxConnections: 10
+    ipAllowList: []
+
+  # Backend Web Service
+  - type: web
+    name: telemedicine-backend
+    runtime: python
+    buildCommand: cd backend && pip install -r requirements.txt && pip install psycopg2-binary
+    startCommand: cd backend && python setup_database_postgres.py && python app_postgres.py
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: DB_HOST
+        fromService:
+          type: pserv
+          name: telemedicine-postgres
+          property: host
+      - key: DB_PORT
+        fromService:
+          type: pserv
+          name: telemedicine-postgres
+          property: port
+      - key: DB_USER
+        fromService:
+          type: pserv
+          name: telemedicine-postgres
+          property: user
+      - key: DB_PASSWORD
+        fromService:
+          type: pserv
+          name: telemedicine-postgres
+          property: password
+      - key: DB_NAME
+        value: telemedicine_db
+    plan: free
+
+  # Frontend Static Site
+  - type: site
+    name: telemedicine-frontend
+    buildCommand: ""
+    publishDir: frontend
+    envVars:
+      - key: API_URL
+        value: https://telemedicine-backend.onrender.com/api
+    plan: free

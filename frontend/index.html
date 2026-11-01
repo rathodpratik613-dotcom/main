@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMedicine India — Healthcare Anywhere</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Loading Spinner Overlay -->
+<div id="loadingOverlay" class="loading-overlay hidden">
+    <div class="spinner-wrap">
+        <div class="spinner"></div>
+        <p>Loading…</p>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- App Shell -->
+<div id="app">
+
+    <!-- ====== LOGIN / REGISTER PAGE ====== -->
+    <section id="loginSection" class="section auth-page active">
+        <div class="auth-left">
+            <div class="auth-illustration">
+                <div class="ill-circle ill-c1"></div>
+                <div class="ill-circle ill-c2"></div>
+                <div class="ill-circle ill-c3"></div>
+                <div class="ill-icon">🏥</div>
+                <div class="ill-tagline">
+                    <h2>India's #1 Telemedicine Platform</h2>
+                    <p>Connect with 100+ certified doctors, find medicines, book lab tests — all from home.</p>
+                    <ul class="ill-features">
+                        <li>✅ 24/7 Doctor Consultations</li>
+                        <li>✅ Medicine Search &amp; Pharmacy Finder</li>
+                        <li>✅ Emergency Services — 112 / 108</li>
+                        <li>✅ Lab Tests at Trusted Centres</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="auth-right">
+            <div class="auth-card">
+                <div class="auth-logo">
+                    <span class="logo-icon">🩺</span>
+                    <span class="logo-text">TeleMed<strong>India</strong></span>
+                </div>
+
+                <!-- Toggle -->
+                <div class="auth-toggle">
+                    <button class="toggle-btn active" onclick="toggleAuth('login')">Sign In</button>
+                    <button class="toggle-btn" onclick="toggleAuth('register')">Create Account</button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="loginEmail">Email address</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">📧</span>
+                            <input type="email" id="loginEmail" required placeholder="you@example.com" autocomplete="email">
+                        </div>
+                        <span class="field-error" id="loginEmailErr"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">🔒</span>
+                            <input type="password" id="loginPassword" required placeholder="Enter your password" autocomplete="current-password">
+                        </div>
+                        <span class="field-error" id="loginPasswordErr"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Sign In →</button>
+                    <p class="auth-switch">Don't have an account? <a href="#" onclick="toggleAuth('register')">Register now</a></p>
+                </form>
+
+                <!-- Register Form -->
+                <form id="registerForm" class="auth-form hidden">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="regName">Full Name</label>
+                            <div class="input-wrap">
+                                <span class="input-icon">👤</span>
+                                <input type="text" id="regName" required placeholder="Rahul Sharma">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="regAge">Age</label>
+                            <div class="input-wrap">
+                                <span class="input-icon">🎂</span>
+                                <input type="number" id="regAge" required placeholder="25" min="1" max="120">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">Email address</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">📧</span>
+                            <input type="email" id="regEmail" required placeholder="you@example.com" autocomplete="email">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="regPhone">Phone</label>
+                            <div class="input-wrap">
+                                <span class="input-icon">📱</span>
+                                <input type="tel" id="regPhone" required placeholder="+91 9876543210">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="regGender">Gender</label>
+                            <div class="input-wrap">
+                                <span class="input-icon">⚧</span>
+                                <select id="regGender" required>
+                                    <option value="">Select</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regAddress">Address</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">📍</span>
+                            <textarea id="regAddress" required placeholder="Enter your address" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">🔒</span>
+                            <input type="password" id="regPassword" required placeholder="Create a strong password" autocomplete="new-password">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Create Account →</button>
+                    <p class="auth-switch">Already have an account? <a href="#" onclick="toggleAuth('login')">Sign in</a></p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== MAIN APP SHELL (sidebar + content) ====== -->
+    <div id="mainShell" class="main-shell hidden">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <span class="logo-icon">🩺</span>
+                <span class="logo-text">TeleMed<strong>India</strong></span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a class="nav-item active" data-section="home" onclick="showSection('home')">
+                    <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
+                </a>
+                <a class="nav-item" data-section="doctors" onclick="showSection('doctors')">
+                    <span class="nav-icon">👨‍⚕️</span><span class="nav-label">Find Doctors</span>
+                </a>
+                <a class="nav-item" data-section="consultations" onclick="showSection('consultations')">
+                    <span class="nav-icon">📋</span><span class="nav-label">Consultations</span>
+                </a>
+                <a class="nav-item" data-section="medicines" onclick="showSection('medicines')">
+                    <span class="nav-icon">💊</span><span class="nav-label">Medicines</span>
+                </a>
+                <a class="nav-item" data-section="emergency" onclick="showSection('emergency')">
+                    <span class="nav-icon">🚑</span><span class="nav-label">Emergency</span>
+                </a>
+                <a class="nav-item" data-section="labtests" onclick="showSection('labtests')">
+                    <span class="nav-icon">🔬</span><span class="nav-label">Lab Tests</span>
+                </a>
+                <a class="nav-item" data-section="video" onclick="showSection('video')">
+                    <span class="nav-icon">📹</span><span class="nav-label">Video Call</span>
+                </a>
+                <a class="nav-item" data-section="blog" onclick="showSection('blog')">
+                    <span class="nav-icon">📰</span><span class="nav-label">Health Blog</span>
+                </a>
+                <a class="nav-item" data-section="followups" onclick="showSection('followups')">
+                    <span class="nav-icon">🗓️</span><span class="nav-label">Follow-ups</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-user" id="sidebarUser">
+                    <div class="user-avatar-small" id="sidebarAvatar">U</div>
+                    <div class="user-info-small">
+                        <span id="sidebarName">User</span>
+                        <small>Patient</small>
+                    </div>
+                </div>
+                <button class="btn-logout" onclick="logout()">
+                    <span>⎋</span> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Mobile Top Bar -->
+        <header class="mobile-topbar">
+            <button class="hamburger" onclick="toggleSidebar()">☰</button>
+            <span class="mobile-logo">🩺 TeleMedIndia</span>
+            <button class="btn-logout-sm" onclick="logout()">⎋</button>
+        </header>
+
+        <!-- Content Area -->
+        <main class="content-area" id="contentArea">
+
+            <!-- ===== HOME SECTION ===== -->
+            <section id="homeSection" class="section hidden">
+                <div class="page-header">
+                    <div>
+                        <h1 class="welcome-title">Good day, <span id="welcomeName">Friend</span> 👋</h1>
+                        <p class="welcome-sub">How can we help you today?</p>
+                    </div>
+                    <div class="date-badge">
+                        <span id="todayDate"></span>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions-grid">
+                    <div class="qa-card qa-doctors" onclick="showSection('doctors')">
+                        <div class="qa-icon">👨‍⚕️</div>
+                        <div class="qa-text">
+                            <strong>Find Doctor</strong>
+                            <span>100+ specialists</span>
+                        </div>
+                    </div>
+                    <div class="qa-card qa-consult" onclick="showSection('consultations')">
+                        <div class="qa-icon">📋</div>
+                        <div class="qa-text">
+                            <strong>My Consultations</strong>
+                            <span>View history</span>
+                        </div>
+                    </div>
+                    <div class="qa-card qa-medicine" onclick="showSection('medicines')">
+                        <div class="qa-icon">💊</div>
+                        <div class="qa-text">
+                            <strong>Medicines</strong>
+                            <span>Search &amp; find</span>
+                        </div>
+                    </div>
+                    <div class="qa-card qa-emergency" onclick="showSection('emergency')">
+                        <div class="qa-icon">🚑</div>
+                        <div class="qa-text">
+                            <strong>Emergency</strong>
+                            <span>112 · 108</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Tip Banner -->
+                <div class="health-tip-banner">
+                    <div class="tip-icon">💡</div>
+                    <div class="tip-content">
+                        <strong>Daily Health Tip</strong>
+                        <p id="healthTip">Drink at least 8 glasses of water daily to stay hydrated and maintain optimal body function.</p>
+                    </div>
+                    <button class="tip-refresh" onclick="refreshHealthTip()" title="Next tip">🔄</button>
+                </div>
+
+                <!-- Stats Row -->
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-value">100+</div>
+                        <div class="stat-label">Qualified Doctors</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">50+</div>
+                        <div class="stat-label">Pharmacies</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">1000+</div>
+                        <div class="stat-label">Medicines</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label">Support</div>
+                    </div>
+                </div>
+
+                <!-- Feature Cards -->
+                <h2 class="section-heading">Our Services</h2>
+                <div class="features-grid">
+                    <div class="feature-card" onclick="showSection('doctors')">
+                        <div class="feature-icon">👨‍⚕️</div>
+                        <h3>24/7 Doctor Consultation</h3>
+                        <p>Connect with 100+ qualified Indian doctors anytime, anywhere.</p>
+                    </div>
+                    <div class="feature-card" onclick="showSection('medicines')">
+                        <div class="feature-icon">💊</div>
+                        <h3>Medicine Finder</h3>
+                        <p>Find medicines at pharmacies across India with real-time stock info.</p>
+                    </div>
+                    <div class="feature-card" onclick="showSection('emergency')">
+                        <div class="feature-icon">🚑</div>
+                        <h3>Emergency Services</h3>
+                        <p>One-tap access to ambulance &amp; emergency contacts across India.</p>
+                    </div>
+                    <div class="feature-card" onclick="showSection('labtests')">
+                        <div class="feature-icon">🔬</div>
+                        <h3>Lab Tests</h3>
+                        <p>Book tests at trusted diagnostic centres near you.</p>
+                    </div>
+                    <div class="feature-card" onclick="showSection('video')">
+                        <div class="feature-icon">📹</div>
+                        <h3>Video Consultations</h3>
+                        <p>Face-to-face HD video calls with specialists.</p>
+                    </div>
+                    <div class="feature-card" onclick="showSection('blog')">
+                        <div class="feature-icon">📰</div>
+                        <h3>Health Blog</h3>
+                        <p>Latest health tips, medical news &amp; wellness guides.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== DOCTORS SECTION ===== -->
+            <section id="doctorsSection" class="section hidden">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Find Doctors</h1>
+                        <p class="page-sub">Book a consultation with our verified specialists</p>
+                    </div>
+                </div>
+                <!-- Search & Filter -->
+                <div class="search-filter-bar">
+                    <div class="search-wrap">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="doctorSearchInput" placeholder="Search by name or specialization…" oninput="filterDoctors()">
+                    </div>
+                    <select id="doctorSpecFilter" onchange="filterDoctors()" class="filter-select">
+                        <option value="">All Specializations</option>
+                    </select>
+                </div>
+                <div id="doctorsList" class="doctors-grid">
+                    <!-- Doctors loaded here -->
+                </div>
+            </section>
+
+            <!-- ===== CONSULTATIONS SECTION ===== -->
+            <section id="consultationsSection" class="section hidden">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">My Consultations</h1>
+                        <p class="page-sub">Your consultation history &amp; status</p>
+                    </div>
+                </div>
+                <div id="consultationsList" class="timeline-list">
+                    <!-- Consultations loaded here -->
+                </div>
+            </section>
+
+            <!-- ===== MEDICINES SECTION ===== -->
+            <section id="medicinesSection" class="section hidden">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Medicines &amp; Pharmacy</h1>
+                        <p class="page-sub">Find medicines at pharmacies near you</p>
+                    </div>
+                </div>
+                <div class="search-filter-bar">
+                    <div class="search-wrap">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="medicineSearch" placeholder="Search medicines by name…">
+                    </div>
+                    <button class="btn btn-primary" onclick="searchMedicines()">Search</button>
+                </div>
+                <div id="medicinesList" class="medicines-grid">
+                    <!-- Medicines loaded here -->
+                </div>
+            </section>
+
+            <!-- ===== EMERGENCY SECTION ===== -->
+            <section id="emergencySection" class="section hidden">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Emergency Services</h1>
+                        <p class="page-sub">One-tap access to India's emergency helplines</p>
+                    </div>
+                </div>
+                <div class="emergency-grid">
+                    <div class="emergency-card emr-red">
+                        <div class="emr-icon">🆘</div>
+                        <div class="emr-number">112</div>
+                        <div class="emr-name">National Emergency</div>
+                        <p class="emr-desc">Police · Fire · Medical emergencies</p>
+                        <a href="tel:112" class="btn btn-danger btn-full">📞 Call 112</a>
+                    </div>
+                    <div class="emergency-card emr-orange">
+                        <div class="emr-icon">🚑</div>
+                        <div class="emr-number">108</div>
+                        <div class="emr-name">Ambulance Services</div>
+                        <p class="emr-desc">24/7 ambulance service across India</p>
+                        <a href="tel:108" class="btn btn-danger btn-full">📞 Call 108</a>
+                    </div>
+                    <div class="emergency-card emr-purple">
+                        <div class="emr-icon">👩</div>
+                        <div class="emr-number">181</div>
+                        <div class="emr-name">Women Helpline</div>
+                        <p class="emr-desc">24/7 women safety helpline</p>
+                        <a href="tel:181" class="btn btn-primary btn-full">📞 Call 181</a>
+                    </div>
+                    <div class="emergency-card emr-blue">
+                        <div class="emr-icon">🧒</div>
+                        <div class="emr-number">1098</div>
+                        <div class="emr-name">Child Helpline</div>
+                        <p class="emr-desc">24/7 child protection helpline</p>
+                        <a href="tel:1098" class="btn btn-primary btn-full">📞 Call 1098</a>
+                    </div>
+                    <div class="emergency-card emr-teal">
+                        <div class="emr-icon">🧠</div>
+                        <div class="emr-number">011-23381030</div>
+                        <div class="emr-name">Mental Health Helpline</div>
+                        <p class="emr-desc">24/7 mental health support</p>
+                        <a href="tel:01123381030" class="btn btn-primary btn-full">📞 Call Now</a>
+                    </div>
+                    <div class="emergency-card emr-gray">
+                        <div class="emr-icon">🚁</div>
+                        <div class="emr-number">9540161344</div>
+                        <div class="emr-name">Air Ambulance</div>
+                        <p class="emr-desc">Emergency air ambulance service</p>
+                        <a href="tel:9540161344" class="btn btn-secondary btn-full">📞 Call Now</a>
+                    </div>
+                </div>
+
+                <div class="emergency-tips-card">
+                    <h3>⚠️ Emergency Tips</h3>
+                    <ul>
+                        <li>Stay calm and assess the situation carefully.</li>
+                        <li>Call the appropriate emergency number immediately.</li>
+                        <li>Provide your exact location to the dispatcher.</li>
+                        <li>Follow the dispatcher's instructions precisely.</li>
+                        <li>Keep a first aid kit ready at home.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ===== LAB TESTS SECTION ===== -->
+            <section id="labtestsSection" class="section hidden">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Lab Tests &amp; Diagnostics</h1>
+                        <p class="page-sub">Book tests at trusted diagnostic centres</p>
+                    </div>
+                </div>
+                <div class="lab-grid">
+                    <div class="lab-card">
+                        <div class="lab-icon">🩸</div>
+                        <h3>Complete Blood Count (CBC)</h3>
+                        <p>Full blood analysis including RBC, WBC, platelets</p>
+                        <div class="lab-footer">
+                            <span class="lab-price">₹350</span>
+                            <button class="btn btn-primary btn-sm" onclick="bookLabTest('Complete Blood Count',350)">Book Now</button>
+                        </div>
+                    </div>
+                    <div class="lab-card">
+                        <div class="lab-icon">🩺</div>
+                        <h3>Blood Sugar Test</h3>
+                        <p>Fasting and post-prandial blood sugar levels</p>
+                        <div class="lab-footer">
+                            <span class="lab-price">₹150</span>
+                            <button class="btn btn-primary btn-sm" onclick="bookLabTest('Blood Sugar Test',150)">Book Now</button>
+                        </div>
+                    </div>
+                    <div class="lab-card">
+                        <div class="lab-icon">💉</div>
+                        <h3>Lipid Profile</h3>
+                        <p>Cholesterol, triglycerides, HDL, LDL</p>
+                        <div class="lab-footer">
+                            <span class="lab-price">₹450</span>
+                            <button class="btn btn-primary btn-sm" onclick="bookLabTest('Lipid Profile',450)">Book Now</button>
+                        </div>
+                    </div>
+                    <div class="lab-card">
+                        <div class="lab-icon">🦋</div>
+                        <h3>Thyroid Function Test</h3>
+                        <p>T3, T4, TSH levels</p>
+                        <div class="lab-footer">
+                            <span class="lab-price">₹400</span>
+                            <button class="btn btn-primary btn-sm" onclick="bookLabTest('Thyroid Function Test',400)">Book Now</button>
+                        </div>
+                    </div>
+                    <div class="lab-card">
+                        <div class="lab-icon">🫀</div>
+                        <h3>Liver Function Test</h3>
+                        <p>Complete liver health analysis</p>
+                        <div class="lab-footer">
+                            <span class="lab-price">₹500</span>
+                            <button class="btn btn-primary btn-sm" onclick="bookLabTest('Liver Function Test',500)">Book Now</button>
+                        </div>
+                    </div>
+                    <div class="lab-card">
+                        <div class="lab-icon">🫘</div>
+                        <h3>Kidney Function Test</h3>
+                        <p>Complete kidney health analysis</p>
+                        <div class="lab-footer">
+                            <span class="lab-price">₹450</span>
+                            <button class="btn btn-primary btn-sm" onclick="bookLabTest('Kidney Function Test',450)">Book Now</button>
+                        </div>
+                    </div>
+                    <div class="lab-card">
+                        <div class="lab-icon">🧪</div>
+                        <h3>Urine Analysis</h3>
+                        <p>Complete urine examination</p>
+                        <div class="lab-footer">
+                            <span class="lab-price">₹150</span>
+                            <button class="btn btn-primary btn-sm" onclick="bookLabTest('Urine Analysis',150)">Book Now</button>
+                        </div>
+                    </div>
+                    <div class="lab-card">
+                        <div class="lab-icon">☀️</div>
+                        <h3>Vitamin D Test</h3>
+                        <p>25-hydroxy vitamin D levels</p>
+                        <div class="lab-footer">
+                            <span class="lab-price">₹600</span>
+                            <button class="btn btn-primary btn-sm" onclick="bookLabTest('Vitamin D Test',600)">Book Now</button>
+                        </div>
+                    </div>
+                    <div class="lab-card">
+                        <div class="lab-icon">🧬</div>
+                        <h3>Vitamin B12 Test</h3>
+                        <p>Vitamin B12 levels</p>
+                        <div class="lab-footer">
+                            <span class="lab-price">₹550</span>
+                            <button class="btn btn-primary btn-sm" onclick="bookLabTest('Vitamin B12 Test',550)">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="section-heading" style="margin-top:2rem;">Partner Diagnostic Centres</h2>
+                <div class="partners-row">
+                    <div class="partner-card">
+                        <div class="partner-logo">L</div>
+                        <div>
+                            <strong>Dr. Lal PathLabs</strong>
+                            <p>Available across India</p>
+                            <span class="rating">⭐ 4.5/5</span>
+                        </div>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-logo">T</div>
+                        <div>
+                            <strong>Thyrocare</strong>
+                            <p>Available across India</p>
+                            <span class="rating">⭐ 4.3/5</span>
+                        </div>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-logo">M</div>
+                        <div>
+                            <strong>Metropolis Healthcare</strong>
+                            <p>Available across India</p>
+                            <span class="rating">⭐ 4.4/5</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== VIDEO CONSULTATION SECTION ===== -->
+            <section id="videoSection" class="section hidden">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Video Consultation</h1>
+                        <p class="page-sub">Face-to-face with top specialists from home</p>
+                    </div>
+                </div>
+                <div class="video-hero">
+                    <div class="video-info">
+                        <h2>Connect Instantly with Doctors</h2>
+                        <p>Experience HD-quality video consultations with our network of specialists. Share reports, get prescriptions, all from the comfort of your home.</p>
+                        <div class="video-features-grid">
+                            <div class="vf-item"><span>📹</span><strong>HD Video</strong></div>
+                            <div class="vf-item"><span>🖥️</span><strong>Screen Sharing</strong></div>
+                            <div class="vf-item"><span>📁</span><strong>File Transfer</strong></div>
+                            <div class="vf-item"><span>🔒</span><strong>Encrypted</strong></div>
+                        </div>
+                        <button onclick="startVideoCall()" class="btn btn-primary btn-lg">▶ Start Video Call</button>
+                    </div>
+                    <div class="video-demo-box">
+                        <div class="vdemo-top">
+                            <div class="vdemo-avatar vd-doc">👨‍⚕️</div>
+                            <div class="vdemo-label">Dr. Sharma</div>
+                        </div>
+                        <div class="vdemo-status">🟢 Ready to connect</div>
+                        <div class="vdemo-bottom">
+                            <div class="vdemo-avatar vd-patient">👤</div>
+                            <div class="vdemo-label">You</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="section-heading">Available for Video Consultation</h2>
+                <div class="v-doctors-grid">
+                    <div class="v-doctor-card">
+                        <div class="doc-avatar-circle" style="background:linear-gradient(135deg,#0ea5e9,#6366f1)">RK</div>
+                        <div class="v-doc-info">
+                            <strong>Dr. Rajesh Kumar</strong>
+                            <span class="spec-badge">General Physician</span>
+                            <p>25 years experience</p>
+                        </div>
+                        <div class="v-doc-side">
+                            <span class="avail-badge">● Available</span>
+                            <button class="btn btn-primary btn-sm">Book ₹500</button>
+                        </div>
+                    </div>
+                    <div class="v-doctor-card">
+                        <div class="doc-avatar-circle" style="background:linear-gradient(135deg,#10b981,#0ea5e9)">MG</div>
+                        <div class="v-doc-info">
+                            <strong>Dr. Maria Garcia</strong>
+                            <span class="spec-badge">Cardiologist</span>
+                            <p>18 years experience</p>
+                        </div>
+                        <div class="v-doc-side">
+                            <span class="avail-badge">● Available</span>
+                            <button class="btn btn-primary btn-sm">Book ₹800</button>
+                        </div>
+                    </div>
+                    <div class="v-doctor-card">
+                        <div class="doc-avatar-circle" style="background:linear-gradient(135deg,#6366f1,#10b981)">SA</div>
+                        <div class="v-doc-info">
+                            <strong>Dr. Sarah Ahmed</strong>
+                            <span class="spec-badge">Pediatrician</span>
+                            <p>15 years experience</p>
+                        </div>
+                        <div class="v-doc-side">
+                            <span class="avail-badge">● Available</span>
+                            <button class="btn btn-primary btn-sm">Book ₹600</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== HEALTH BLOG SECTION ===== -->
+            <section id="blogSection" class="section hidden">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Health Blog</h1>
+                        <p class="page-sub">Tips, guides, and medical news for you</p>
+                    </div>
+                </div>
+                <div class="blog-grid">
+                    <article class="blog-card">
+                        <div class="blog-thumb" style="background:linear-gradient(135deg,#0ea5e9,#6366f1)">🏃</div>
+                        <div class="blog-body">
+                            <span class="blog-tag">Wellness</span>
+                            <h3>10 Tips for a Healthy Lifestyle</h3>
+                            <p>Simple daily habits that can transform your health and well-being…</p>
+                            <div class="blog-meta"><span>Jan 15, 2025</span><button class="btn btn-secondary btn-sm">Read More</button></div>
+                        </div>
+                    </article>
+                    <article class="blog-card">
+                        <div class="blog-thumb" style="background:linear-gradient(135deg,#10b981,#0ea5e9)">🥗</div>
+                        <div class="blog-body">
+                            <span class="blog-tag">Nutrition</span>
+                            <h3>Superfoods for Indian Diet</h3>
+                            <p>Discover nutritious Indian foods that boost immunity and energy…</p>
+                            <div class="blog-meta"><span>Jan 12, 2025</span><button class="btn btn-secondary btn-sm">Read More</button></div>
+                        </div>
+                    </article>
+                    <article class="blog-card">
+                        <div class="blog-thumb" style="background:linear-gradient(135deg,#6366f1,#10b981)">😴</div>
+                        <div class="blog-body">
+                            <span class="blog-tag">Wellness</span>
+                            <h3>Importance of Quality Sleep</h3>
+                            <p>How adequate sleep affects your physical and mental health…</p>
+                            <div class="blog-meta"><span>Jan 10, 2025</span><button class="btn btn-secondary btn-sm">Read More</button></div>
+                        </div>
+                    </article>
+                    <article class="blog-card">
+                        <div class="blog-thumb" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">🧘</div>
+                        <div class="blog-body">
+                            <span class="blog-tag">Fitness</span>
+                            <h3>Yoga for Stress Relief</h3>
+                            <p>Simple yoga poses to reduce stress and improve mental clarity…</p>
+                            <div class="blog-meta"><span>Jan 8, 2025</span><button class="btn btn-secondary btn-sm">Read More</button></div>
+                        </div>
+                    </article>
+                    <article class="blog-card">
+                        <div class="blog-thumb" style="background:linear-gradient(135deg,#0ea5e9,#10b981)">💪</div>
+                        <div class="blog-body">
+                            <span class="blog-tag">Fitness</span>
+                            <h3>Home Workout Guide</h3>
+                            <p>Effective exercises you can do at home without equipment…</p>
+                            <div class="blog-meta"><span>Jan 5, 2025</span><button class="btn btn-secondary btn-sm">Read More</button></div>
+                        </div>
+                    </article>
+                    <article class="blog-card">
+                        <div class="blog-thumb" style="background:linear-gradient(135deg,#6366f1,#ef4444)">🧠</div>
+                        <div class="blog-body">
+                            <span class="blog-tag">Mental Health</span>
+                            <h3>Mental Health Awareness</h3>
+                            <p>Understanding and managing anxiety and depression…</p>
+                            <div class="blog-meta"><span>Jan 3, 2025</span><button class="btn btn-secondary btn-sm">Read More</button></div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- ===== FOLLOW-UPS SECTION ===== -->
+            <section id="followupsSection" class="section hidden">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">My Follow-ups</h1>
+                        <p class="page-sub">Scheduled follow-up appointments</p>
+                    </div>
+                </div>
+                <div id="followupsList" class="timeline-list">
+                    <!-- Follow-ups loaded here -->
+                </div>
+            </section>
+
+        </main><!-- end content-area -->
+
+        <!-- Bottom Tab Bar (mobile) -->
+        <nav class="bottom-tabbar">
+            <a class="tab-item active" data-section="home" onclick="showSection('home')">
+                <span class="tab-icon">🏠</span><span class="tab-label">Home</span>
+            </a>
+            <a class="tab-item" data-section="doctors" onclick="showSection('doctors')">
+                <span class="tab-icon">👨‍⚕️</span><span class="tab-label">Doctors</span>
+            </a>
+            <a class="tab-item" data-section="consultations" onclick="showSection('consultations')">
+                <span class="tab-icon">📋</span><span class="tab-label">My Care</span>
+            </a>
+            <a class="tab-item" data-section="medicines" onclick="showSection('medicines')">
+                <span class="tab-icon">💊</span><span class="tab-label">Medicines</span>
+            </a>
+            <a class="tab-item" data-section="emergency" onclick="showSection('emergency')">
+                <span class="tab-icon">🚑</span><span class="tab-label">Emergency</span>
+            </a>
+        </nav>
+
+    </div><!-- end mainShell -->
+
+</div><!-- end #app -->
+
+<!-- ====== CONSULTATION MODAL ====== -->
+<div id="consultationModal" class="modal-overlay hidden" onclick="handleModalBackdrop(event)">
+    <div class="modal-card" role="dialog" aria-modal="true">
+        <div class="modal-header">
+            <div>
+                <h2>Book Consultation</h2>
+                <p id="modalDoctorName" class="modal-doctor-name"></p>
+            </div>
+            <button class="modal-close" onclick="closeModal('consultationModal')">✕</button>
+        </div>
+        <form id="consultationForm" class="modal-body">
+            <input type="hidden" id="selectedDoctorId">
+            <div class="form-group">
+                <label for="symptoms">Describe your symptoms</label>
+                <textarea id="symptoms" required placeholder="Please describe your symptoms in detail — the more you share, the better your doctor can help." rows="5"></textarea>
+                <span class="field-error" id="symptomsErr"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('consultationModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Submit Request</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
