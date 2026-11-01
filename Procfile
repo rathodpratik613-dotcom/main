@@ -1,1 +1,1 @@
-web: cd backend && python app_sqlite.py
+web: python backend/app.py
