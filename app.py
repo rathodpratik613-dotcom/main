@@ -9,7 +9,9 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-app = Flask(__name__, static_folder='frontend', static_url_path='')
+# Use absolute path for static folder
+static_folder_path = os.path.join(os.path.dirname(__file__), 'frontend')
+app = Flask(__name__, static_folder=static_folder_path, static_url_path='')
 CORS(app)
 
 # MySQL Database Configuration
