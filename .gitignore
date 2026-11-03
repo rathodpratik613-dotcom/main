@@ -31,10 +31,8 @@ ENV/
 .env
 .env.local
 
-# Database
-*.db
-*.sqlite
-*.sqlite3
+# Database (local development only)
+# telemedicine.db will be created automatically on Render
 
 # IDE
 .vscode/
